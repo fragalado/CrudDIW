@@ -31,68 +31,98 @@ namespace CrudDIW
 
             List<LibroDto> listaLibros = new List<LibroDto>();
 
-            NpgsqlConnection conexion = conexionSql.ConectaBD();
+            NpgsqlConnection conexion = null;
             
-            if(conexion != null)
+            int opcion;
+            bool estado = false;
+            do
             {
-                int opcion;
-                do
+                // Conectamos a la base de datos
+                try
                 {
-                    opcion = -1;
+                    conexion = conexionSql.ConectaBD();
+                    estado = conexion.State.ToString().Equals("Open");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("\n\t[ERROR-Program-Main] Error conexión no abierta: " + e.Message);
+                }
+
+                // Si la conexion esta abierta mostraremos el menu
+                // Si esta cerrada no mostraremos el menu
+                opcion = -1;
+                if (estado)
+                {
                     try
                     {
                         opcion = intM.Menu();
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine("[ERROR-Program-Main] No se ha introducido una opción correcta " + e);
+                        Console.WriteLine("\n\t[ERROR-Program-Main] No se ha introducido una opción correcta " + e.Message);
                     }
 
-                    switch (opcion) 
+                    Console.Clear(); // Borramos consola
+                    switch (opcion)
                     {
                         case 1:
                             // Select
                             try
                             {
+                                Console.Clear();
                                 listaLibros = consultasSql.selectLibro(conexion);
 
                                 foreach (LibroDto aux in listaLibros)
                                 {
-                                    Console.WriteLine("Id = {0}, Titulo = {1}, Autor = {2}, Isbn = {3}, Edicion = {4}", aux.IdLibro
-                                                                                                                      , aux.Titulo
-                                                                                                                      , aux.Autor
-                                                                                                                      , aux.Isbn
-                                                                                                                      , aux.Edicion);
+                                    Console.WriteLine("\tId = {0}, Titulo = {1}, Autor = {2}, Isbn = {3}, Edicion = {4}", aux.IdLibro
+                                                                                                                        , aux.Titulo
+                                                                                                                        , aux.Autor
+                                                                                                                        , aux.Isbn
+                                                                                                                        , aux.Edicion);
                                 }
                             }
                             catch (Exception)
                             {
-                                Console.WriteLine("[ERROR-Program-Main] Error no se ha podido hacer el select");
+                                Console.WriteLine("\n\t[ERROR-Program-Main] Error no se ha podido hacer el select");
                             }
                             break;
                         case 2:
                             // Insert
+                            try
+                            {
+                                consultasSql.insertLibro(conexion);
+                            }
+                            catch (Exception)
+                            {
+                                Console.WriteLine("\n\t[ERROR-Program-Main] Error no se ha podido hacer el insert");
+                            }
                             break;
                         case 3:
                             // Update
                             break;
                         case 4:
                             // Delete
+                            try
+                            {
+                                consultasSql.deleteLibro(conexion);
+                            }
+                            catch (Exception)
+                            {
+                                Console.WriteLine("\n\t[ERROR-Program-Main] Error no se ha podido hacer el delete");
+                            }
                             break;
                     }
+                }
 
-                    // Para volver al menu
-                    if(opcion != 0)
-                    {
-                        Console.WriteLine("\n\tPulse una tecla para volver al menu");
-                        Console.ReadKey(true);
-                    }
+                // Para volver al menu
+                if(opcion != 0 && estado)
+                {
+                    Console.WriteLine("\n\tPulse una tecla para volver al menu");
+                    Console.ReadKey(true);
+                }
 
-                    Console.Clear();
-                } while (opcion != 0);
-            }
-            else
-                Console.WriteLine("[ERROR-Program-Main] Error la conexion no esta abierta");
+                Console.Clear();
+            } while (opcion != 0 && estado);
 
             // Para salir
             Console.WriteLine("\n\n\tPulse una tecla para salir");

@@ -14,7 +14,7 @@ namespace CrudDIW.Servicios
         {
             // Se lee la cadena de conexion a Postgresql del archivo de configuracion
             string stringConexionPostgresql = ConfigurationManager.ConnectionStrings["stringConexion"].ConnectionString;
-            Console.WriteLine("[INFO-ImplConexionSql-ConectaBD] Cadena conexion: " + stringConexionPostgresql);
+            Console.WriteLine("\n\t[INFO-ImplConexionSql-ConectaBD] Cadena conexion: " + stringConexionPostgresql);
 
             NpgsqlConnection conexion = null;
             string estado = "";
@@ -29,13 +29,13 @@ namespace CrudDIW.Servicios
                     estado = conexion.State.ToString();
 
                     if (estado.Equals("Open"))
-                        Console.WriteLine("[INFO-ImplConexionSql-ConectaBD] Estado conexion: " + estado);
+                        Console.WriteLine("\n\t[INFO-ImplConexionSql-ConectaBD] Estado conexion: " + estado);
                     else
                         conexion = null;
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("[ERROR-ImplConexionSql-ConectaBD] Error al generar la conexion " + e);
+                    Console.WriteLine("\n\t[ERROR-ImplConexionSql-ConectaBD] Error al generar la conexion " + e.Message);
                     return conexion=null;
                 }
             }
@@ -50,11 +50,11 @@ namespace CrudDIW.Servicios
                 conexion.Close();
 
                 if(!conexion.State.ToString().Equals("Open"))
-                    Console.WriteLine("[INFO-ImplConexionSql-DesconectaBD] Estado conexion: " + conexion.State.ToString());
+                    Console.WriteLine("\n\t[INFO-ImplConexionSql-DesconectaBD] Estado conexion: " + conexion.State.ToString());
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                Console.WriteLine("[ERROR-ImplConexionSql-DesconectaBD] Error al desconectar la conexion");
+                Console.WriteLine("\n\t[ERROR-ImplConexionSql-DesconectaBD] Error al desconectar la conexion " + e.Message);
             }
         }
     }
