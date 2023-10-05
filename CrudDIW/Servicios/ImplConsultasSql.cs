@@ -109,7 +109,8 @@ namespace CrudDIW.Servicios
                 int filasAfectadas = declaracion.ExecuteNonQuery();
                 if(filasAfectadas > -1)
                     Console.WriteLine("\n\t[INFO-ImplConsultasSql-insertLibro] Insert ha funcionado");
-
+                else
+                    Console.WriteLine("\n\t[ERROR-ImplConsultasSql-insertLibro] Insert no ha funcionado");
                 // Cerramos la conexion
                 conexion.Close();
 
@@ -148,6 +149,8 @@ namespace CrudDIW.Servicios
                     int filasAfectadas = declaracion.ExecuteNonQuery();
                     if (filasAfectadas > -1)
                         Console.WriteLine("\n\t[INFO-ImplConsultasSql-deleteLibro] Delete ha funcionado");
+                    else
+                        Console.WriteLine("\n\t[ERROR-ImplConsultasSql-deleteLibro] Delete no ha funcionado");
                 }                
 
                 // Cerramos la conexion
@@ -168,7 +171,61 @@ namespace CrudDIW.Servicios
 
         public void updateLibro(NpgsqlConnection conexion)
         {
-            throw new NotImplementedException();
+            NpgsqlCommand declaracion = null;
+            try
+            {
+                string isbn;
+
+                // Limpiamos la consola
+                Console.Clear();
+
+                // Pedimos el isbn
+                Console.Write("\n\tIntroduzca el isbn del libro a modificar: ");
+                isbn = Console.ReadLine();
+
+                // Ahora pedimos los nuevos datos del libro
+                // Pedimos el titulo
+                Console.Write("\n\tIntroduzca el nuevo titulo del libro: ");
+                string titulo = Console.ReadLine();
+
+                // Pedimos el autor
+                Console.Write("\n\tIntroduzca el nuevo autor del libro: ");
+                string autor = Console.ReadLine();
+
+                // Pedimos el isbn
+                Console.Write("\n\tIntroduzca el nuevo isbn del libro: ");
+                string isbnNuevo = Console.ReadLine();
+
+                // Pedimos la edicion
+                Console.Write("\n\tIntroduzca la nueva edicion del libro: ");
+                int edicion = Convert.ToInt32(Console.ReadLine());
+
+                // Hacemos la query y el execute
+                declaracion = new NpgsqlCommand("UPDATE gbp_almacen.gbp_alm_cat_libros SET titulo=@titulo, autor=@autor, isbn=@isbnNuevo, edicion=@edicion where isbn=@isbn", conexion);
+                declaracion.Parameters.AddWithValue("@titulo", titulo);
+                declaracion.Parameters.AddWithValue("@isbnNuevo", isbnNuevo);
+                declaracion.Parameters.AddWithValue("@autor", autor);
+                declaracion.Parameters.AddWithValue("@edicion", edicion);
+                declaracion.Parameters.AddWithValue("@isbn", isbn);
+
+                int filasAfectadas = declaracion.ExecuteNonQuery();
+                if(filasAfectadas > - 1)
+                    Console.WriteLine("\n\t[INFO-ImplConsultasSql-updateLibro] Update ha funcionado");
+                else
+                    Console.WriteLine("\n\t[ERROR-ImplConsultasSql-updateLibro] Update no ha funcionado");
+                
+                // Cerramos la conexion
+                conexion.Close();
+
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine("\n\t[ERROR-ImplConsultasSql-deleteLibro] Error " + e.Message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("\n\t[ERROR-ImplConsultasSql-deleteLibro] Error " + e.Message);
+            }
         }
 
         private Boolean PreguntaSiNo(string txt)

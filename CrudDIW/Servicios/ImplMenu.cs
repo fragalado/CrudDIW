@@ -28,9 +28,11 @@ namespace CrudDIW.Servicios
                 Console.Write("\t\t\tIntroduzca una opción: ");
                 opcion = Console.ReadKey().KeyChar - '0';
 
-                if (opcion < 0 || opcion > 4) Console.Clear(); // Para limpiar la consola
                 if (opcion < 0 || opcion > 4)
+                {
+                    Console.Clear();
                     Console.WriteLine("\n\t\t\t** Error: El valor no está dentro del rango **");
+                }
             } while (opcion < 0 || opcion > 4);
 
             return opcion;

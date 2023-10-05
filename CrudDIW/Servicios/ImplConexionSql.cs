@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace CrudDIW.Servicios
 {
+    /// <summary>
+    /// Implementación de la interfaz para conectar a la base de datos
+    /// </summary>
     class ImplConexionSql : InterfazConexionSql
     {
         public NpgsqlConnection ConectaBD()
@@ -17,7 +20,7 @@ namespace CrudDIW.Servicios
             Console.WriteLine("\n\t[INFO-ImplConexionSql-ConectaBD] Cadena conexion: " + stringConexionPostgresql);
 
             NpgsqlConnection conexion = null;
-            string estado = "";
+            string estado;
 
             if (!string.IsNullOrWhiteSpace(stringConexionPostgresql))
             {

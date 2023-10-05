@@ -13,6 +13,11 @@ namespace CrudDIW.Util
     /// </summary>
     class ADto
     {
+        /// <summary>
+        /// Método que pasa un DataReader de libros a una lista de libros
+        /// </summary>
+        /// <param name="resultadoConsulta"></param>
+        /// <returns>Devuelve una lista de LibroDto</returns>
         public List<LibroDto> readerALibroDto(NpgsqlDataReader resultadoConsulta)
         {
             // Lista donde guardaremos los libros

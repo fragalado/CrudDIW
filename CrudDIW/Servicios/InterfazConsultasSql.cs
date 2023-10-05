@@ -21,10 +21,25 @@ namespace CrudDIW.Servicios
         /// <returns></returns>
         List<LibroDto> selectLibro(NpgsqlConnection conexion);
 
+        /// <summary>
+        /// Método que hace el insert de uno o varios libros a la base de datos
+        /// Pedirá los datos del libro y una vez que se termine se preguntara si se quiere añadir más libros
+        /// </summary>
+        /// <param name="conexion"></param>
         void insertLibro(NpgsqlConnection conexion);
 
+        /// <summary>
+        /// Método que hace el update de un libro a la base de datos.
+        /// Preguntará el isbn del libro a modificar y después preguntará los nuevos datos del libro.
+        /// </summary>
+        /// <param name="conexion"></param>
         void updateLibro(NpgsqlConnection conexion);
 
+        /// <summary>
+        /// Método que hace el delete de un libro a la base de datos.
+        /// Preguntará el isbn del libro a eliminar y después preguntará si se está seguro de eliminar
+        /// </summary>
+        /// <param name="conexion"></param>
         void deleteLibro(NpgsqlConnection conexion);
     }
 }

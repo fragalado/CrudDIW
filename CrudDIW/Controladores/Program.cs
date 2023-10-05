@@ -62,7 +62,7 @@ namespace CrudDIW
                         Console.WriteLine("\n\t[ERROR-Program-Main] No se ha introducido una opción correcta " + e.Message);
                     }
 
-                    Console.Clear(); // Borramos consola
+                    Console.Clear(); // Limpiamos la consola
                     switch (opcion)
                     {
                         case 1:
@@ -99,6 +99,14 @@ namespace CrudDIW
                             break;
                         case 3:
                             // Update
+                            try
+                            {
+                                consultasSql.updateLibro(conexion);
+                            }
+                            catch (Exception)
+                            {
+                                Console.WriteLine("\n\t[ERROR-Program-Main] Error no se ha podido hacer el update");
+                            }
                             break;
                         case 4:
                             // Delete

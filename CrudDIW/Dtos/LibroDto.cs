@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace CrudDIW.Dtos
 {
+    /// <summary>
+    /// Clase LibroDto, clase que tendrá las propiedades de un libro
+    /// </summary>
     class LibroDto
     {
         // Atributos
