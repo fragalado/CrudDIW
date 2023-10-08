@@ -56,10 +56,7 @@ namespace CrudDIW.Servicios
         }
 
         public void insertLibro(NpgsqlConnection conexion)
-        { // TODO
-            // Lista para guardar los libros
-            List<LibroDto> listaLibros = new List<LibroDto>();
-
+        {
             NpgsqlCommand declaracion = null;
             try
             {
@@ -89,28 +86,16 @@ namespace CrudDIW.Servicios
                     Console.Write("\n\tIntroduzca la edicion del libro: ");
                     edicion = Convert.ToInt32(Console.ReadLine());
 
-                    // Lo añadimos a la lista
-                    listaLibros.Add(new LibroDto(0, titulo, autor, isbn, edicion));
+                    // Hacemos el insert de los datos a la base de datos
+                    declaracion = new NpgsqlCommand("INSERT INTO gbp_almacen.gbp_alm_cat_libros (titulo, autor, isbn, edicion) VALUES (@titulo, @autor, @isbn, @edicion);", conexion);
+                    declaracion.Parameters.AddWithValue("@titulo", titulo);
+                    declaracion.Parameters.AddWithValue("@autor", autor);
+                    declaracion.Parameters.AddWithValue("@isbn", isbn);
+                    declaracion.Parameters.AddWithValue("@edicion", edicion);
 
+                    declaracion.ExecuteNonQuery();
                 } while (PreguntaSiNo("Quieres seguir"));
 
-                // Ahora tendremos que hacer el insert de los libros de la lista
-                // Recorremos la lista
-                foreach (LibroDto aux in listaLibros)
-                {
-                    declaracion = new NpgsqlCommand("INSERT INTO gbp_almacen.gbp_alm_cat_libros (titulo, autor, isbn, edicion) VALUES (@titulo, @autor, @isbn, @edicion);", conexion);
-                    declaracion.Parameters.AddWithValue("@titulo", aux.Titulo);
-                    declaracion.Parameters.AddWithValue("@autor", aux.Autor);
-                    declaracion.Parameters.AddWithValue("@isbn", aux.Isbn);
-                    declaracion.Parameters.AddWithValue("@edicion", aux.Edicion);
-                }
-
-                // Hacemos el commit
-                int filasAfectadas = declaracion.ExecuteNonQuery();
-                if(filasAfectadas > -1)
-                    Console.WriteLine("\n\t[INFO-ImplConsultasSql-insertLibro] Insert ha funcionado");
-                else
-                    Console.WriteLine("\n\t[ERROR-ImplConsultasSql-insertLibro] Insert no ha funcionado");
                 // Cerramos la conexion
                 conexion.Close();
 
